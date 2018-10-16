@@ -1,0 +1,31 @@
+{
+  "name": "nulsworldjs",
+  "version": "0.1.0",
+  "description": "NULS.World Javascript API for NULS Blockchain",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moshemalawach/nulsworldjs.git"
+  },
+  "keywords": [
+    "nuls",
+    "blockchain"
+  ],
+  "author": "Moshe Malawach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moshemalawach/nulsworldjs/issues"
+  },
+  "homepage": "https://github.com/moshemalawach/nulsworldjs#readme",
+  "dependencies": {
+    "bigi": "^1.4.2",
+    "bs58": "^4.0.1",
+    "int64-buffer": "^0.99.1007",
+    "ripemd160": "^2.0.2",
+    "secp256k1": "^3.5.2",
+    "sha.js": "^2.4.11"
+  }
+}
