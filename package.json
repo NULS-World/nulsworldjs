@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/moshemalawach/nulsworldjs#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "bigi": "^1.4.2",
     "bs58": "^4.0.1",
     "int64-buffer": "^0.99.1007",

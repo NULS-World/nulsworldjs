@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { hash_from_address } from '../wallet/model/data'
+import { hash_from_address } from '../model/data'
 import {
   CHEAP_UNIT_FEE,
   Transaction, Coin} from '../model/transaction'
