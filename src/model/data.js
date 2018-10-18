@@ -1,6 +1,5 @@
 var shajs = require('sha.js')
 var RIPEMD160 = require('ripemd160')
-var BigInteger = require('bigi')
 const bs58 = require('bs58')
 var Uint64LE = require("int64-buffer").Uint64LE;
 
