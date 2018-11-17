@@ -1,3 +1,5 @@
-var exports = module.exports = {};
-module.exports.api = require('./api/index.js');
-module.exports.model = require('./model/index.js');
+export * from './api/index.js';
+export * from './model/index.js';
+
+export const api = './api/index.js';
+export const model = './model/index.js';

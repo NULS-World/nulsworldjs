@@ -1,4 +1,7 @@
-var exports = module.exports = {};
-module.exports.data = require('./data.js');
-module.exports.store = require('./store.js');
-module.exports.transactions = require('./transaction.js');
+export * from './data.js';
+export * from './store.js';
+export * from './transaction.js';
+
+export const data = './data.js';
+export const store = './store.js';
+export const transactions = './transactions.js';
