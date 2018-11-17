@@ -361,15 +361,22 @@ export class Transaction {
     return size
   }
 
-  get_digest () {
+  get_digest (hash_varint=false) {
     let buf = Buffer.alloc(this.get_max_size())
     let cursor = 0
-    buf[0] = this.type
-    buf[1] = 255
-    cursor += 2
+    if (hash_varint) {
+      buf[0] = this.type
+      buf[1] = 255
+      cursor += 2
 
-    writeUint64(Math.round(this.time), buf, cursor)
-    cursor += 8
+      writeUint64(Math.round(this.time), buf, cursor)
+      cursor += 8
+    } else {
+      buf.writeUIntLE(this.type, cursor, 2)
+      cursor += 2
+      buf.writeUIntLE(this.time, cursor, 6)
+      cursor += 6
+    }
 
     cursor += write_with_length(this.remark, buf, cursor)
     cursor = this._write_data(buf, cursor)
@@ -382,14 +389,14 @@ export class Transaction {
     return digest
   }
 
-  get_hash () {
-    let digest = this.get_digest()
+  get_hash (hash_varint=false) {
+    let digest = this.get_digest(hash_varint)
     let buf = Buffer.concat([Buffer.from([0, digest.length]), digest])
     return buf
   }
 
-  sign (prv_key) {
-    let digest = this.get_digest()
+  sign (prv_key, hash_varint=false) {
+    let digest = this.get_digest(hash_varint)
 
     let pub_key = private_key_to_public_key(prv_key)
     let pub_key2 = secp256k1.publicKeyCreate(prv_key)
