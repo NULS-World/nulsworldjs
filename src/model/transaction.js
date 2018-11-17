@@ -7,7 +7,7 @@ import {
   private_key_to_public_key
 } from './data.js'
 
-import secp256k1 from 'secp256k1'
+const secp256k1 = require('secp256k1')
 
 
 const ADDRESS_LENGTH = 23

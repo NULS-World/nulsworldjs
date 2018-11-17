@@ -2,9 +2,17 @@
   "name": "nulsworldjs",
   "version": "0.1.0",
   "description": "NULS.World Javascript API for NULS Blockchain",
-  "main": "src/index.js",
+  "main": "dist/nulsworldjs.cjs.js",
+  "module": "dist/nulsworldjs.esm.js",
+  "browser": "dist/nulsworldjs.umd.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean:dist": "rimraf dist",
+    "build:dev": "npm run clean:dist && rollup -c -w",
+    "build": "npm run clean:dist && rollup -c"
   },
   "repository": {
     "type": "git",
@@ -28,5 +36,15 @@
     "ripemd160": "^2.0.2",
     "secp256k1": "^3.5.2",
     "sha.js": "^2.4.11"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.2",
+    "rollup": "^0.67.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-terser": "^3.0.0"
   }
 }
