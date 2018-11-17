@@ -195,6 +195,29 @@ export class Transaction {
       cursor += Buffer.from(md['joinTxHash'], 'hex').copy(buffer, cursor)
     } else if (this.type === 9) { // stop agent
       cursor += Buffer.from(md['createTxHash'], 'hex').copy(buffer, cursor)
+    } else if (this.type === 101) { // call contract
+      cursor += hash_from_address(md['sender']).copy(buffer, cursor)
+      cursor += hash_from_address(md['contractAddress']).copy(buffer, cursor)
+      writeUint64(Math.round(md['value']), output, cursor)
+      cursor += 8
+      writeUint64(Math.round(md['gasLimit']), output, cursor)
+      cursor += 8
+      writeUint64(Math.round(md['price']), output, cursor)
+      cursor += 8
+      cursor += write_with_length(Buffer.from(md['methodName'], 'utf8'),
+                                  output, cursor)
+      cursor += write_with_length(Buffer.from(md['methodDesc'], 'utf8'),
+                                  output, cursor)
+      output[cursor] = md['args'].length
+      cursor += 1
+      for (let arg of md['args']) {
+        output[cursor] = arg.len
+        cursor += 1
+        for (let argitem of arg) {
+          cursor += write_with_length(Buffer.from(argitem, 'utf8'),
+                                      output, cursor)
+        }
+      }
     } else {
       throw 'Not implemented'
     }
@@ -353,6 +376,16 @@ export class Transaction {
       data_size = HASH_LENGTH
     } else if (this.type === 9) { // stop agent
       data_size = HASH_LENGTH
+    } else if (this.type === 101) { // call contract
+      data_size = ADDRESS_LENGTH + ADDRESS_LENGTH + 8 + 8 + 8 +
+                  5 + this.module_data['methodName'].length +
+                  5 + this.module_data['methodDesc'].length + 1
+      for (let arg of this.module_data['args']) {
+        data_size += 1
+        for (let argitem of arg) {
+          data_size += 5 + argitem.length
+        }
+      }
     }
     let size = 2 + 6 + 1 + this.remark.length + data_size +
               5 + (this.inputs.length * MAX_COIN_SIZE) +
