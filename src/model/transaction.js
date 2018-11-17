@@ -160,6 +160,46 @@ export class Transaction {
     } else if (this.type === 9) { // cancel consensus
       md['createTxHash'] = buffer.slice(cursor, cursor + HASH_LENGTH).toString('hex')
       cursor += HASH_LENGTH
+    } else if (this.type === 101) {
+      md['sender'] = buffer.slice(cursor, cursor + ADDRESS_LENGTH)
+      cursor += ADDRESS_LENGTH
+      md['sender'] = address_from_hash(md['sender'])
+
+      md['contractAddress'] = buffer.slice(cursor, cursor + ADDRESS_LENGTH)
+      cursor += ADDRESS_LENGTH
+      md['contractAddress'] = address_from_hash(md['contractAddress'])
+
+      md['value'] = readUint64(buffer, cursor)
+      cursor += 8
+      md['gasLimit'] = readUint64(buffer, cursor)
+      cursor += 8
+      md['price'] = readUint64(buffer, cursor)
+      cursor += 8
+
+      let {len: pos, val: methodName} = read_by_length(buffer, cursor)
+      cursor += pos
+      md['methodName'] = methodName.toString('utf8')
+
+      let {len: pos2, val: methodDesc} = read_by_length(buffer, cursor)
+      cursor += pos2
+      md['methodDesc'] = methodDesc.toString('utf8')
+
+      let argslen = buffer[cursor]
+      cursor += 1
+      let args = []
+      for (let i = 0; i <= argslen; i++) {
+        let arglen = buffer[cursor]
+        cursor += 1
+        let arg = []
+        for (let j = 0; j <= arglen; j++) {
+          let {len: pos3, val: argcontent} = read_by_length(buffer, cursor)
+          cursor += pos3
+          arg.push(argcontent.toString('utf8'))
+        }
+        args.push(arg)
+      }
+      md['args'] = args
+      
     } else {
       throw 'Not implemented'
     }
