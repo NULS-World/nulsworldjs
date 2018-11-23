@@ -199,7 +199,7 @@ export class Transaction {
         args.push(arg)
       }
       md['args'] = args
-      
+
     } else {
       throw 'Not implemented'
     }
@@ -389,7 +389,7 @@ export class Transaction {
   calculate_fee () {
     let max_size = this.get_max_size()
     let unit_fee = UNIT_FEE
-    if (this.type === 2) {
+    if ((this.type === 2) || (this.type === 101)){
       unit_fee = CHEAP_UNIT_FEE
     }
 
