@@ -105,7 +105,7 @@ export async function create_post (address, post_type, content, title = null, re
 export async function broadcast (tx,
                                  {api_server = DEFAULT_SERVER} = {}) {
   let response = await axios.post('${api_server}/broadcast', {
-    txHex: this.signed_tx
+    txHex: tx
   })
   return response.data.value;
 }
