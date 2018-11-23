@@ -2,6 +2,7 @@ import {DEFAULT_SERVER} from './base'
 import {
   CHEAP_UNIT_FEE,
   Transaction, Coin} from '../model/transaction'
+import {hash_from_address} from '../model/data'
 import {get_outputs} from './create.js'
 import axios from 'axios'
 
@@ -18,8 +19,8 @@ export async function call_view_method (address, method, args,
 
 export async function prepare_contract_call_tx (address, contract_address,
                                                 method, args,
-                                                remark,
                                                {value = 0,
+                                                remark = '',
                                                 method_desc = '',
                                                 api_server = DEFAULT_SERVER,
                                                 gas_price = 25,
