@@ -252,7 +252,7 @@ export class Transaction {
       buffer[cursor] = md['args'].length
       cursor += 1
       for (let arg of md['args']) {
-        buffer[cursor] = arg.len
+        buffer[cursor] = arg.length
         cursor += 1
         for (let argitem of arg) {
           cursor += write_with_length(Buffer.from(argitem, 'utf8'),
@@ -334,7 +334,8 @@ export class Transaction {
   }
 
   serialize () {
-    let output = new Buffer.alloc(this.get_max_size()) // 1mb max size ?
+    //let output = new Buffer.alloc(this.get_max_size()) // 1mb max size ?
+    let output = Buffer.alloc(300000) // max size 300kb...
     let cursor = 0
     output.writeUIntLE(this.type, cursor, 2)
     cursor += 2
