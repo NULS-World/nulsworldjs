@@ -13,7 +13,7 @@ export async function get_outputs (address,
 
 export async function ipfs_push (value,
                                  {api_server = DEFAULT_SERVER} = {}) {
-  let response = await axios.post('${api_server}/ipfs/add_json', value)
+  let response = await axios.post(`${api_server}/ipfs/add_json`, value)
   if (response.data.hash !== undefined) {
     return response.data.hash
   } else {
@@ -26,7 +26,7 @@ export async function ipfs_push_file (fileobject,
   let formData = new FormData();
   formData.append('file', fileobject);
 
-  let response = await axios.post( '${api_server}/ipfs/add_file',
+  let response = await axios.post( `${api_server}/ipfs/add_file`,
     formData,
     {
       headers: {
@@ -104,7 +104,7 @@ export async function create_post (address, post_type, content, title = null, re
 
 export async function broadcast (tx,
                                  {api_server = DEFAULT_SERVER} = {}) {
-  let response = await axios.post('${api_server}/broadcast', {
+  let response = await axios.post(`${api_server}/broadcast`, {
     txHex: tx
   })
   return response.data.value;
