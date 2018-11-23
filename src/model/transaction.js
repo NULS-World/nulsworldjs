@@ -1,7 +1,8 @@
 import {
   read_by_length, write_with_length,
   parse_varint, write_varint,
-  address_from_hash, hash_twice,
+  address_from_hash,
+  hash_twice,
   hash_from_address,
   readUint64, writeUint64,
   private_key_to_public_key
@@ -216,8 +217,8 @@ export class Transaction {
       PLACE_HOLDER.copy(buffer, cursor)
       cursor += PLACE_HOLDER.length
     } else if (this.type === 3) { // alias
-      cursor += write_with_length(hash_from_address(md['address']), output, cursor)
-      cursor += write_with_length(hash_from_address(md['alias']), output, cursor)
+      cursor += write_with_length(hash_from_address(md['address']), buffer, cursor)
+      cursor += write_with_length(hash_from_address(md['alias']), buffer, cursor)
     } else if (this.type === 4) { // register agent
       writeUint64(md['deposit'], buffer, cursor)
       cursor += 8
@@ -238,24 +239,24 @@ export class Transaction {
     } else if (this.type === 101) { // call contract
       cursor += hash_from_address(md['sender']).copy(buffer, cursor)
       cursor += hash_from_address(md['contractAddress']).copy(buffer, cursor)
-      writeUint64(Math.round(md['value']), output, cursor)
+      writeUint64(Math.round(md['value']), buffer, cursor)
       cursor += 8
-      writeUint64(Math.round(md['gasLimit']), output, cursor)
+      writeUint64(Math.round(md['gasLimit']), buffer, cursor)
       cursor += 8
-      writeUint64(Math.round(md['price']), output, cursor)
+      writeUint64(Math.round(md['price']), buffer, cursor)
       cursor += 8
       cursor += write_with_length(Buffer.from(md['methodName'], 'utf8'),
-                                  output, cursor)
+                                  buffer, cursor)
       cursor += write_with_length(Buffer.from(md['methodDesc'], 'utf8'),
-                                  output, cursor)
-      output[cursor] = md['args'].length
+                                  buffer, cursor)
+      buffer[cursor] = md['args'].length
       cursor += 1
       for (let arg of md['args']) {
-        output[cursor] = arg.len
+        buffer[cursor] = arg.len
         cursor += 1
         for (let argitem of arg) {
           cursor += write_with_length(Buffer.from(argitem, 'utf8'),
-                                      output, cursor)
+                                      buffer, cursor)
         }
       }
     } else {
