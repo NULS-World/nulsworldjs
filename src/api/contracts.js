@@ -1,6 +1,7 @@
 import {DEFAULT_SERVER} from './base'
 import {
   CHEAP_UNIT_FEE,
+  UNIT_FEE,
   Transaction, Coin} from '../model/transaction'
 import {hash_from_address} from '../model/data'
 import {get_outputs} from './create.js'
@@ -34,8 +35,8 @@ export async function prepare_contract_call_tx (address, contract_address,
 
       ],
       'outputs': [
-        {address: hash_from_address(address),
-          value: outputs_data.total_available}
+        {'address': hash_from_address(address),
+          'value': outputs_data.total_available}
       ],
       'type': 101,
       'scriptSig': '',
@@ -54,7 +55,7 @@ export async function prepare_contract_call_tx (address, contract_address,
   )
 
   let total_value = 0
-  while (total_value < (CHEAP_UNIT_FEE+(gas_price*gas_limit)+value)) {
+  while (total_value < (UNIT_FEE+(gas_price*gas_limit)+value)) {
     let utxo = outputs_data.outputs.shift()
     if (utxo === undefined) {
       break
@@ -68,6 +69,12 @@ export async function prepare_contract_call_tx (address, contract_address,
       lockTime: utxo.lockTime
     }))
   }
-  tx.outputs[0].na = total_value - tx.calculate_fee() - (gas_price*gas_limit) // value not implemented
+  tx.outputs[0].na = total_value - tx.calculate_fee() - (gas_price*gas_limit) - value
+  if (value) {
+    tx.outputs.push(Coin.from_dict({
+      'address': hash_from_address(contract_address),
+      'value': value
+    }))
+  }
   return tx
 }
