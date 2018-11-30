@@ -1,4 +1,4 @@
 var storage = {
   accounts: []
-};
-export {storage};
+}
+export {storage}
