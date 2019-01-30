@@ -79,7 +79,9 @@ export async function prepare_remark_tx (address, remark,
   return tx
 }
 
-export async function create_post (address, post_type, content, title = null, ref = null) {
+export async function create_post (address, post_type, content,
+                                   {api_server = DEFAULT_SERVER,
+                                    title = null, ref = null, misc_content = null} = {}) {
   let post_content = {
     'type': post_type,
     'content': {
@@ -93,10 +95,13 @@ export async function create_post (address, post_type, content, title = null, re
   if (ref !== null) {
     post_content.ref = ref
   }
+  if (misc_content !== null) {
+    Object.assign(post_content.content, misc_content);
+  }
 
-  let hash = await ipfs_push(post_content)
+  let hash = await ipfs_push(post_content, {'api_server':api_server})
   let remark = `IPFS;P;${hash}`
-  let tx = await prepare_remark_tx(address, remark)
+  let tx = await prepare_remark_tx(address, remark, {'api_server':api_server})
   // tx.sign(Buffer.from(account.private_key, 'hex'))
   // let signed_tx = tx.serialize().toString('hex')
   return tx
