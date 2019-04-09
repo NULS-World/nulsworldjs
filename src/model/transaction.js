@@ -346,8 +346,10 @@ export class Transaction {
 
     cursor = this._write_coin_data(output, cursor)
 
-    if (!(this.scriptSig === null)) {
-      cursor += write_with_length(this.scriptSig, output, cursor)
+    if (this.scriptSig !== null) {
+      if (this.scriptSig.byteLength) {
+        cursor += write_with_length(this.scriptSig, output, cursor)
+      }
     }
 
     output = output.slice(0, cursor)
