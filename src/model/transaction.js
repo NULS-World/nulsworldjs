@@ -363,7 +363,7 @@ export class Transaction {
     if (item.time === null) { item.time = (new Date().getTime()) }
     item.height = value.blockHeight || null
     item.remark = value.remark ? new Buffer.from(value.remark, 'utf8') : new Buffer([])
-    item.scriptSig = new Buffer.from(value.scriptSig, 'hex') || new Buffer.from([])
+    item.scriptSig = new Buffer.from(value.scriptSig, 'hex') || null
     item.size = value.size || null
     item.module_data = value.info || {}
 
